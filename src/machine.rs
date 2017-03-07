@@ -9,12 +9,12 @@ pub struct Machine<'a, R: Read, W: Write> {
     dp: usize,
     input: R,
     output: W,
-    read_buf: Vec<u8>,
+    read_buf: [u8; 1],
 }
 
 impl<'a, R: Read, W: Write> Display for Machine<'a, R, W> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, 
+        write!(f,
             "Machine ( code: {:?}, dp: {:?}, buf: {:?} )",
             self.code, self.dp, self.read_buf
         )
@@ -30,11 +30,11 @@ impl<'a, R: Read, W: Write> Machine<'a, R, W> {
             dp: 0,
             input: inp,
             output: out,
-            read_buf: Vec::new(),
+            read_buf: [0; 1],
         }
     }
 
-    pub fn execute(&mut self) -> io::Result<usize> {
+    pub fn execute(&mut self) {
         while self.ip < self.code.len() {
             let ins = &self.code[self.ip];
 
@@ -65,25 +65,25 @@ impl<'a, R: Read, W: Write> Machine<'a, R, W> {
                         continue
                     }
                 },
+                InstructionType::NEW_LINE => {
+                    self.ip += 1;
+                    continue
+                },
                 _ => break,
             }
             self.ip += 1;
         }
-        self.output.write(self.read_buf.as_slice())
     }
 
     fn read_char(&mut self) {
-        let mut buff: [u8; 1] = [0; 1];
-        match self.input.read(&mut buff) {
-            Ok(_) => {
-                self.read_buf.push( buff[0] );
-                self.memory[self.dp] = self.read_buf[0] as usize;
-            },
-            Err(e) => { panic!(e) },
-        };
+        self.input.read(&mut self.read_buf);
+        self.memory[self.dp] = *self.read_buf.first().unwrap() as usize;
+
+        println!("memory: {:?}", self.memory[self.dp]);
     }
 
-    fn put_char(&mut self) {
-        self.read_buf.push(self.memory[self.dp] as u8);
+    fn put_char(&mut self) -> io::Result<usize> {
+        self.read_buf[0] = self.memory[self.dp] as u8;
+        self.output.write(&[self.read_buf.last().unwrap().to_owned()])
     }
 }

@@ -9,6 +9,7 @@ pub enum InstructionType {
     READ_CHAR,
     JMP_IF_ZERO,
     JMP_IF_NOT_ZERO,
+    NEW_LINE,
     INVALID,
 }
 
@@ -23,10 +24,11 @@ impl InstructionType {
             ',' => InstructionType::READ_CHAR,
             '[' => InstructionType::JMP_IF_ZERO,
             ']' => InstructionType::JMP_IF_NOT_ZERO,
+            '\n' => InstructionType::NEW_LINE,
             _ => InstructionType::INVALID,
         }
     }
-    
+
     pub fn to_char(ins_type: InstructionType) -> char {
         match ins_type {
             InstructionType::PLUS => '+',
@@ -37,6 +39,7 @@ impl InstructionType {
             InstructionType::READ_CHAR => ',',
             InstructionType::JMP_IF_ZERO => '[',
             InstructionType::JMP_IF_NOT_ZERO => ']',
+            InstructionType::NEW_LINE => '\n',
             InstructionType::INVALID => '0',
         }
     }

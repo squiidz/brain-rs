@@ -13,13 +13,13 @@ fn main() {
         Ok(f) => f,
         Err(e) => panic!(e),
     };
-    
+
     let mut code = String::new();
     match file.read_to_string(&mut code) {
         Ok(_) => { },
         Err(e) => panic!(e),
     }
-    
+
     let mut cmp = compiler::Compiler::new(&code);
     let instructions = cmp.compile();
     let mut machine = machine::Machine::new(instructions, inp, out);

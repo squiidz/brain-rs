@@ -25,9 +25,9 @@ impl Compiler {
             let current = self.code.chars().nth(self.position).unwrap();
             match current {
                 '[' => loop_stack.push(self.emit_with_arg(InstructionType::JMP_IF_ZERO, 0)),
-                ']' => { 
+                ']' => {
                     let op_ins = loop_stack[loop_stack.len() - 1];
-                    loop_stack = loop_stack[..loop_stack.len() - 1].to_vec(); 
+                    loop_stack = loop_stack[..loop_stack.len() - 1].to_vec();
                     let close_ins_pos = self.emit_with_arg(InstructionType::JMP_IF_NOT_ZERO, op_ins);
                     self.instructions[op_ins].argument = close_ins_pos;
                 },
@@ -50,5 +50,5 @@ impl Compiler {
     fn emit_with_arg(&mut self, ins_type: InstructionType, arg: usize) -> usize {
         self.instructions.push(Instruction::new(ins_type, arg));
         self.instructions.len() - 1
-    }   
+    }
 }
