@@ -17,7 +17,10 @@ fn main() {
     };
     let mut file = match File::open(file_name) {
         Ok(f) => f,
-        Err(e) => panic!(e),
+        Err(_) => {
+            println!("{} Source file needed.", ERROR);
+            return
+        },
     };
 
     let mut code = String::new();
