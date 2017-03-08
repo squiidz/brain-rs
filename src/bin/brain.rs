@@ -1,6 +1,6 @@
 extern crate brain;
 
-use brain::{compiler, machine};
+use brain::{Compiler, Machine};
 use std::io::{self, Read};
 use std::fs::File;
 use std::env;
@@ -32,8 +32,8 @@ fn main() {
         },
     }
 
-    let mut cmp = compiler::Compiler::new(&code);
+    let mut cmp = Compiler::new(&code);
     let instructions = cmp.compile();
-    let mut machine = machine::Machine::new(instructions, inp, out);
+    let mut machine = Machine::new(instructions, inp, out);
     machine.execute();
 }
