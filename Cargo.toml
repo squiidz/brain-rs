@@ -3,6 +3,11 @@ name = "brain"
 version = "0.1.0"
 authors = ["jchaput <piinkyz05@gmail.com>"]
 
+[lib]
+name = "brain"
+crate-type = ["rlib", "dylib"]
+path = "src/lib.rs"
+
 [[bin]]
 doc = false
 name = "brain"
