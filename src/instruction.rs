@@ -13,8 +13,25 @@ pub enum InstructionType {
     INVALID,
 }
 
-impl InstructionType {
-    pub fn from_char(c: char) -> Self {
+impl Into<char> for InstructionType {
+    fn into(self) -> char {
+        match self {
+            InstructionType::PLUS => '+',
+            InstructionType::MINUS => '-',
+            InstructionType::RIGHT => '>',
+            InstructionType::LEFT => '<',
+            InstructionType::PUT_CHAR => '.',
+            InstructionType::READ_CHAR => ',',
+            InstructionType::JMP_IF_ZERO => '[',
+            InstructionType::JMP_IF_NOT_ZERO => ']',
+            InstructionType::NEW_LINE => '\n',
+            InstructionType::INVALID => '0',
+        }
+    }
+}
+
+impl From<char> for InstructionType {
+    fn from(c: char) -> Self {
         match c {
             '+' => InstructionType::PLUS,
             '-' => InstructionType::MINUS,
@@ -26,21 +43,6 @@ impl InstructionType {
             ']' => InstructionType::JMP_IF_NOT_ZERO,
             '\n' => InstructionType::NEW_LINE,
             _ => InstructionType::INVALID,
-        }
-    }
-
-    pub fn to_char(ins_type: InstructionType) -> char {
-        match ins_type {
-            InstructionType::PLUS => '+',
-            InstructionType::MINUS => '-',
-            InstructionType::RIGHT => '>',
-            InstructionType::LEFT => '<',
-            InstructionType::PUT_CHAR => '.',
-            InstructionType::READ_CHAR => ',',
-            InstructionType::JMP_IF_ZERO => '[',
-            InstructionType::JMP_IF_NOT_ZERO => ']',
-            InstructionType::NEW_LINE => '\n',
-            InstructionType::INVALID => '0',
         }
     }
 }

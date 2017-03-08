@@ -31,7 +31,7 @@ impl Compiler {
                     let close_ins_pos = self.emit_with_arg(InstructionType::JMP_IF_NOT_ZERO, op_ins);
                     self.instructions[op_ins].argument = close_ins_pos;
                 },
-                _ => self.compile_foldable_instruction(current, InstructionType::from_char(current)),
+                _ => self.compile_foldable_instruction(current, InstructionType::from(current)),
             }
             self.position += 1;
         }
