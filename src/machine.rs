@@ -45,11 +45,14 @@ impl<'a, R: Read, W: Write> Machine<'a, R, W> {
                 InstructionType::LEFT => self.dp -= ins.argument,
                 InstructionType::PUT_CHAR => {
                     for _ in 0..ins.argument {
-                        self.put_char();
+                        match self.put_char() {
+                            Ok(_) => continue,
+                            Err(e) => panic!(e),
+                        }
                     }
                 },
                 InstructionType::READ_CHAR => {
-                    for _ in 0..ins.argument {
+                   for _ in 0..ins.argument {
                         self.read_char();
                     }
                 },
@@ -66,7 +69,7 @@ impl<'a, R: Read, W: Write> Machine<'a, R, W> {
                     }
                 },
                 InstructionType::NEW_LINE => {
-                    self.ip += 1;
+                    self.ip += ins.argument;
                     continue
                 },
                 _ => break,
@@ -76,10 +79,10 @@ impl<'a, R: Read, W: Write> Machine<'a, R, W> {
     }
 
     fn read_char(&mut self) {
-        self.input.read(&mut self.read_buf);
-        self.memory[self.dp] = *self.read_buf.first().unwrap() as usize;
-
-        println!("memory: {:?}", self.memory[self.dp]);
+        self.read_buf[0] = self.input.by_ref().bytes()
+            .next().and_then(|result| result.ok())
+            .map(|c| c as u8).unwrap();
+        self.memory[self.dp] = self.read_buf[0] as usize;
     }
 
     fn put_char(&mut self) -> io::Result<usize> {
