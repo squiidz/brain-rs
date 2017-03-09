@@ -3,7 +3,7 @@ use std::fmt::{self, Display};
 use instruction::{Instruction, InstructionType};
 
 pub struct Machine<'a, R: Read, W: Write> {
-    code: &'a Vec<Instruction>,
+    code: &'a [Instruction],
     ip: usize,
     memory: [usize; 30000],
     dp: usize,
@@ -22,7 +22,7 @@ impl<'a, R: Read, W: Write> Display for Machine<'a, R, W> {
 }
 
 impl<'a, R: Read, W: Write> Machine<'a, R, W> {
-    pub fn new(ins: &'a Vec<Instruction>, inp: R, out: W) -> Self {
+    pub fn new(ins: &'a [Instruction], inp: R, out: W) -> Self {
         Machine {
             code: ins,
             ip: 0,
