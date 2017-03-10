@@ -1,6 +1,6 @@
 extern crate brain;
 
-use brain::{Compiler, Machine};
+use brain::prelude::*;
 
 #[test]
 fn test_with_string() {
@@ -8,14 +8,8 @@ fn test_with_string() {
     let mut write_buffer: Vec<u8> = Vec::new();
     let code = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.";
 
-    run_machine(code, read_buffer.as_mut_str(), write_buffer.as_mut_slice());
+    execute(code, read_buffer.as_bytes(), &mut write_buffer);
 
-    println!("{:?}", write_buffer);
+    println!("{:?}", write_buffer.iter().map(|c| *c as char).collect::<String>());
     println!("{:?}", read_buffer);
-}
-
-fn run_machine(code: &str, r: &mut str, w: &mut [u8]) {
-    let mut comp = Compiler::new(code);
-    let mut machine = Machine::new(comp.compile(), r.as_bytes(), w);
-    machine.execute()
 }
