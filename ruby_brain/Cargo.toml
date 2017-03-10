@@ -1,0 +1,11 @@
+[package]
+name = "ruby_brain"
+version = "0.1.0"
+authors = ["jchaput <piinkyz05@gmail.com>"]
+
+[dependencies]
+ruru = "*"
+brain = { path = "../" }
+
+[lib]
+crate-type = ["dylib"]
