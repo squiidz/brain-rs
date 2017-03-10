@@ -9,7 +9,7 @@ pub struct Machine<'a, R: Read, W: Write> {
     dp: usize,
     input: R,
     output: W,
-    read_buf: [u8; 1],
+    read_buf: Vec<u8>,
 }
 
 impl<'a, R: Read, W: Write> Display for Machine<'a, R, W> {
@@ -30,7 +30,7 @@ impl<'a, R: Read, W: Write> Machine<'a, R, W> {
             dp: 0,
             input: inp,
             output: out,
-            read_buf: [0; 1],
+            read_buf: Vec::new(),
         }
     }
 
@@ -79,14 +79,21 @@ impl<'a, R: Read, W: Write> Machine<'a, R, W> {
     }
 
     fn read_char(&mut self) {
-        self.read_buf[0] = self.input.by_ref().bytes()
+        let c = self.input.by_ref()
+            .bytes()
             .next().and_then(|result| result.ok())
             .map(|c| c as u8).unwrap();
-        self.memory[self.dp] = self.read_buf[0] as usize;
+
+        self.read_buf.push(c);
+        self.memory[self.dp] = *self.read_buf.last().unwrap() as usize;
     }
 
     fn put_char(&mut self) -> io::Result<usize> {
-        self.read_buf[0] = self.memory[self.dp] as u8;
-        self.output.write(&[self.read_buf.last().unwrap().to_owned()])
+        self.read_buf.push(self.memory[self.dp] as u8);
+
+        match self.read_buf.last() {
+            Some(c) => self.output.write(&[c.clone()]),
+            None => Ok(0),
+        }
     }
 }
