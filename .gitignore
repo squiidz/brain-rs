@@ -4,3 +4,4 @@ Cargo.lock
 tags
 tags.lock
 tags.temp
+.DS_Store
