@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 import { Code } from './code';
 import { Output } from './output';
 
-const apiUrl = 'http://localhost:8000/api/run';
+const apiUrl = 'http://ghosterize.com/api/run';
 
 @Injectable()
 export class CodeService {
