@@ -5,3 +5,5 @@ tags
 tags.lock
 tags.temp
 .DS_Store
+webapp/node_modules
+web_brain/webapp/node_modules

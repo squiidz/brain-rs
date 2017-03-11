@@ -1,0 +1,23 @@
+.code {
+    font-size: 16px;
+    font-family: 'Source Code Pro', monospace;
+    background-color: #5f5f5f;
+    color: #ffffff;
+}
+
+.output {
+    font-size: 16px;
+    font-family: 'Source Code Pro', monospace;
+    background-color: #5f5f5f;
+    color: #7ee03c;
+}
+
+.args {
+    padding: 5px 5px 5px 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.run-btn {
+    
+}

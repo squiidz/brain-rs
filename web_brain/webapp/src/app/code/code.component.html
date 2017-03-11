@@ -1,0 +1,11 @@
+<md-input-container>
+    <textarea mdInput [(ngModel)]="code" class="code" rows=10 cols=150 autofocus required></textarea>
+</md-input-container>
+<md-input-container *ngIf="output.length > 0"> 
+    <textarea mdInput [(ngModel)]="output.output" class="output" rows=5 cols=150 readonly></textarea>
+</md-input-container>
+<br>
+<md-input-container>
+    <input mdInput [(ngModel)]="args" class="args" placeholder="Arguments"/>
+</md-input-container>
+<button md-raised-button (click)="sendCode()" class="run-btn" type="submit">Run</button>
