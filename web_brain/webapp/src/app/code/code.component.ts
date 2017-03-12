@@ -13,6 +13,7 @@ import { Output } from './output';
 export class CodeComponent implements OnInit {
   code: string = "";
   args: string = "";
+  haveInput: boolean = false;
   output: Output = {output: "", length: 0};
 
   constructor(private codeService: CodeService) { }
@@ -28,6 +29,10 @@ export class CodeComponent implements OnInit {
           console.log(this.output); 
         },
         err => { console.log(err) });
+  }
+
+  containsInput() {
+    this.haveInput = this.code.includes(",");
   }
 
 }

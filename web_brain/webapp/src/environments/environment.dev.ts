@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: "http://ghosterize.com/api" 
+  apiUrl: "http://localhost:8000/api" 
 };

@@ -1,11 +1,10 @@
-<md-input-container>
-    <textarea mdInput [(ngModel)]="code" class="code" rows=10 cols=150 autofocus required></textarea>
-</md-input-container>
-<md-input-container *ngIf="output.length > 0"> 
-    <textarea mdInput [(ngModel)]="output.output" class="output" rows=5 cols=150 readonly></textarea>
-</md-input-container>
-<br>
-<md-input-container>
-    <input mdInput [(ngModel)]="args" class="args" placeholder="Arguments"/>
-</md-input-container>
-<button md-raised-button (click)="sendCode()" class="run-btn" type="submit">Run</button>
+<div id="codeEditor" align="center">
+    <md-input-container *ngIf="haveInput">
+        <input mdInput [(ngModel)]="args" class="args" placeholder="Arguments" required/>
+    </md-input-container>
+    <br>
+    <textarea [(ngModel)]="code" (ngModelChange)="containsInput()" id="code" class="code" placeholder="Source Code" rows=10 cols=150 autofocus></textarea>
+    <textarea *ngIf="output.length > 0" [(ngModel)]="output.output" class="output" placeholder="Output" rows=10 cols=150 readonly></textarea>
+    <br>
+    <button md-raised-button (click)="sendCode()" class="run-btn" type="submit">Run</button>
+</div>
