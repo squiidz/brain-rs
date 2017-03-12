@@ -24,10 +24,7 @@ export class CodeComponent implements OnInit {
     let code = new Code(this.code, this.args);
     this.codeService.postCode(code).
       subscribe(
-        out => {
-          this.output = out;
-          console.log(this.output); 
-        },
+        out => { this.output = out },
         err => { console.log(err) });
   }
 

@@ -2,7 +2,7 @@
 #![plugin(rocket_codegen)]
 extern crate rocket;
 extern crate rocket_contrib;
-#[macro_use] 
+#[macro_use]
 extern crate serde_derive;
 extern crate brain;
 
@@ -40,7 +40,11 @@ fn interpret(code: JSON<Code>) -> JSON<Output> {
                 error: "".to_owned(),
             }
         },
-        Err(e) => Output{ output: "".to_owned(), length: 0, error: e },
+        Err(e) => Output{
+            output: "".to_owned(),
+            length: 0,
+            error: e.clone(),
+        },
     };
     JSON(output)
 }
