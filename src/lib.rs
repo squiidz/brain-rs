@@ -10,6 +10,7 @@ pub use machine::Machine;
 pub mod prelude {
     pub use compiler::Compiler;
     pub use machine::Machine;
+    pub use bytecode::ByteCode;
     use std::io::{Read, Write};
 
     pub fn execute<R: Read, W: Write>(code: &str, r: R, w: W) -> Result<(), String> {

@@ -14,7 +14,8 @@ export class CodeComponent implements OnInit {
   code: string = "";
   args: string = "";
   haveInput: boolean = false;
-  output: Output = {output: "", length: 0, error: ""};
+  bytecode: boolean = false;
+  output: Output = {output: "", bytecode: "", length: 0, error: ""};
 
   constructor(private codeService: CodeService) { }
 
@@ -30,6 +31,10 @@ export class CodeComponent implements OnInit {
 
   containsInput() {
     this.haveInput = this.code.includes(",");
+  }
+
+  toggleBytecode() {
+    this.bytecode = this.bytecode ? false : true;
   }
 
 }

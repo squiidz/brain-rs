@@ -22,6 +22,7 @@ struct Code {
 #[derive(Serialize)]
 struct Output {
     output: String,
+    bytecode: String,
     length: usize,
     error: String,
 }
@@ -31,17 +32,22 @@ fn interpret(code: JSON<Code>) -> JSON<Output> {
     let data = &code.code;
     let read_buffer = code.args.clone();
     let mut write_buffer: Vec<u8> = Vec::new();
+    let mut comp = Compiler::new(data);
+    let instructions = comp.compile();
+    let bytecodes = ByteCode::generate_bytecode(instructions);
 
-    let output = match execute(data, read_buffer.as_bytes(), &mut write_buffer) {
+    let output = match Machine::new(instructions, read_buffer.as_bytes(), &mut write_buffer).execute() {
         Ok(_) => {
             Output {
                 output: write_buffer.iter().map(|c| *c as char).collect::<String>(),
+                bytecode: bytecodes,
                 length: write_buffer.len(),
                 error: "".to_owned(),
             }
         },
         Err(e) => Output{
             output: "".to_owned(),
+            bytecode: "".to_owned(),
             length: 0,
             error: e.clone(),
         },

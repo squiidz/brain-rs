@@ -63,15 +63,6 @@ impl Display for ByteCodeType {
     }
 }
 
-impl ByteCodeType {
-    pub fn generate_bytecode(insts: &[Instruction]) -> String {
-        insts.iter()
-        .filter(|inst| inst.ins_type != InstructionType::NEW_LINE)
-        .map(|inst| format!("{}\n", Self::from(inst).to_string()))
-        .collect::<String>()
-    }
-}
-
 #[derive(Debug)]
 pub struct ByteCode {
     byte_code: Vec<ByteCodeType>,
@@ -90,6 +81,13 @@ impl ByteCode {
             index: 0,
             length: length,
         }
+    }
+
+    pub fn generate_bytecode(insts: &[Instruction]) -> String {
+        insts.iter()
+        .filter(|inst| inst.ins_type != InstructionType::NEW_LINE)
+        .map(|inst| format!("{}\n", ByteCodeType::from(inst).to_string()))
+        .collect::<String>()
     }
 
     pub fn execute(&mut self) {

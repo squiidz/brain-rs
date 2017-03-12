@@ -4,8 +4,10 @@
     </md-input-container>
     <br>
     <textarea [(ngModel)]="code" (ngModelChange)="containsInput()" id="code" class="code" placeholder="Source Code" rows=10 cols=150 autofocus></textarea>
-    <textarea *ngIf="output.length > 0" [(ngModel)]="output.output" class="output" placeholder="Output" rows=10 cols=150 readonly></textarea>
-    <textarea *ngIf="output.error" [(ngModel)]="output.error" class="output" placeholder="Output" rows=10 cols=150 readonly></textarea>
+    <textarea *ngIf="output.length > 0 && !bytecode" [(ngModel)]="output.output" class="output" placeholder="Output" rows=10 cols=150 readonly></textarea>
+    <textarea *ngIf="output.error" [(ngModel)]="output.error" class="output" rows=10 cols=150 readonly></textarea>
+    <textarea *ngIf="output.length > 0 && bytecode" [(ngModel)]="output.bytecode" class="output" rows=10 cols=150 readonly></textarea>
     <br>
     <button md-raised-button (click)="sendCode()" class="run-btn" type="submit">Run</button>
+    <md-checkbox (change)="toggleBytecode()">bytecode</md-checkbox>
 </div>
