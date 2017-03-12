@@ -1,7 +1,9 @@
 mod instruction;
 pub mod compiler;
 pub mod machine;
+pub mod bytecode;
 
+pub use bytecode::{ByteCode, ByteCodeType};
 pub use compiler::Compiler;
 pub use machine::Machine;
 

@@ -18,7 +18,7 @@ impl Compiler {
         }
     }
 
-    pub fn compile(&mut self) -> &Vec<Instruction> {
+    pub fn compile(&mut self) -> &[Instruction] {
         let mut loop_stack: Vec<usize> = Vec::new();
 
         while self.position < self.code_length {
