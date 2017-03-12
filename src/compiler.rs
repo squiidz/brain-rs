@@ -48,7 +48,7 @@ impl Compiler {
     }
 
     fn emit_with_arg(&mut self, ins_type: InstructionType, arg: usize) -> usize {
-        self.instructions.push(Instruction::new(ins_type, arg));
+        self.instructions.push(Instruction::new(ins_type, self.position, arg));
         self.instructions.len() - 1
     }
 }

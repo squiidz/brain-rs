@@ -10,9 +10,9 @@ pub mod prelude {
     pub use machine::Machine;
     use std::io::{Read, Write};
 
-    pub fn execute<R: Read, W: Write>(code: &str, r: R, w: W) {
+    pub fn execute<R: Read, W: Write>(code: &str, r: R, w: W) -> Result<(), String> {
         let mut comp = Compiler::new(code);
         let mut machine = Machine::new(comp.compile(), r, w);
-        machine.execute();
+        machine.execute()
     }
 }

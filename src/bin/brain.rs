@@ -35,5 +35,11 @@ fn main() {
     let mut cmp = Compiler::new(&code);
     let instructions = cmp.compile();
     let mut machine = Machine::new(instructions, inp, out);
-    machine.execute();
+    match machine.execute() {
+        Ok(_) => {},
+        Err(e) => {
+            println!("{} {}", ERROR, e);
+            return
+        }
+    }
 }

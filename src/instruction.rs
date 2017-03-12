@@ -41,7 +41,7 @@ impl From<char> for InstructionType {
             ',' => InstructionType::READ_CHAR,
             '[' => InstructionType::JMP_IF_ZERO,
             ']' => InstructionType::JMP_IF_NOT_ZERO,
-            '\n' => InstructionType::NEW_LINE,
+            '\n' | '\r' => InstructionType::NEW_LINE,
             _ => InstructionType::INVALID,
         }
     }
@@ -50,11 +50,16 @@ impl From<char> for InstructionType {
 #[derive(Debug)]
 pub struct Instruction {
     pub ins_type: InstructionType,
+    pub position: usize,
     pub argument: usize,
 }
 
 impl Instruction {
-    pub fn new(ins_type: InstructionType, arg: usize) -> Self {
-        Instruction{ins_type: ins_type, argument: arg}
+    pub fn new(ins_type: InstructionType, pos: usize, arg: usize) -> Self {
+        Instruction{
+            ins_type: ins_type,
+            position: pos,
+            argument: arg
+        }
     }
 }

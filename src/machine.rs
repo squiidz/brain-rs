@@ -34,7 +34,8 @@ impl<'a, R: Read, W: Write> Machine<'a, R, W> {
         }
     }
 
-    pub fn execute(&mut self) {
+    pub fn execute(&mut self) -> Result<(), String> {
+        let mut line_count = (1, 1);
         while self.ip < self.code.len() {
             let ins = &self.code[self.ip];
 
@@ -70,12 +71,17 @@ impl<'a, R: Read, W: Write> Machine<'a, R, W> {
                 },
                 InstructionType::NEW_LINE => {
                     self.ip += ins.argument;
+                    line_count.0 += ins.argument;
+                    line_count.1 = ins.position;
                     continue
                 },
-                _ => break,
+                InstructionType::INVALID => {
+                    return Err(format!("Invalid token at line {}, char {}", line_count.0, ins.position - line_count.1));
+                },
             }
             self.ip += 1;
         }
+        Ok(())
     }
 
     fn read_char(&mut self) {

@@ -23,6 +23,7 @@ struct Code {
 struct Output {
     output: String,
     length: usize,
+    error: String,
 }
 
 #[post("/api/run", format = "application/json", data = "<code>")]
@@ -31,10 +32,15 @@ fn interpret(code: JSON<Code>) -> JSON<Output> {
     let read_buffer = code.args.clone();
     let mut write_buffer: Vec<u8> = Vec::new();
 
-    execute(data, read_buffer.as_bytes(), &mut write_buffer);
-    let output = Output {
-        output: write_buffer.iter().map(|c| *c as char).collect::<String>(),
-        length: write_buffer.len(),
+    let output = match execute(data, read_buffer.as_bytes(), &mut write_buffer) {
+        Ok(_) => {
+            Output {
+                output: write_buffer.iter().map(|c| *c as char).collect::<String>(),
+                length: write_buffer.len(),
+                error: "".to_owned(),
+            }
+        },
+        Err(e) => Output{ output: "".to_owned(), length: 0, error: e },
     };
     JSON(output)
 }

@@ -14,7 +14,7 @@ export class CodeComponent implements OnInit {
   code: string = "";
   args: string = "";
   haveInput: boolean = false;
-  output: Output = {output: "", length: 0};
+  output: Output = {output: "", length: 0, error: ""};
 
   constructor(private codeService: CodeService) { }
 
