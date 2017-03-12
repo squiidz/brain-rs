@@ -11,8 +11,8 @@ pub enum ByteCodeType {
     BACKWARD(usize),
     LOOP(usize),
     END(usize),
-    WRITE,
-    READ,
+    WRITE(usize),
+    READ(usize),
     INVALID, 
 }
 
@@ -25,8 +25,8 @@ impl<'a> From<&'a Instruction> for ByteCodeType {
             InstructionType::LEFT => ByteCodeType::BACKWARD(ins.argument),
             InstructionType::JMP_IF_ZERO => ByteCodeType::LOOP(ins.argument),
             InstructionType::JMP_IF_NOT_ZERO => ByteCodeType::END(ins.argument),
-            InstructionType::PUT_CHAR => ByteCodeType::WRITE,
-            InstructionType::READ_CHAR => ByteCodeType::READ,
+            InstructionType::PUT_CHAR => ByteCodeType::WRITE(ins.argument),
+            InstructionType::READ_CHAR => ByteCodeType::READ(ins.argument),
             _ => { ByteCodeType::INVALID },
         }
     }
@@ -42,8 +42,8 @@ impl<'a> From<&'a str> for ByteCodeType {
             "BACKWARD" => ByteCodeType::BACKWARD(code_arr[1].parse().unwrap()),
             "LOOP" => ByteCodeType::LOOP(code_arr[1].parse().unwrap()),
             "END" => ByteCodeType::END(code_arr[1].parse().unwrap()),
-            "WRITE" => ByteCodeType::WRITE,
-            "READ" => ByteCodeType::READ,
+            "WRITE" => ByteCodeType::WRITE(code_arr[1].parse().unwrap()),
+            "READ" => ByteCodeType::READ(code_arr[1].parse().unwrap()),
             _ => ByteCodeType::INVALID,
         }
     }
@@ -58,6 +58,8 @@ impl Display for ByteCodeType {
             ByteCodeType::BACKWARD(i) => write!(f, "BACKWARD {}", i),
             ByteCodeType::LOOP(i) => write!(f, "LOOP {}", i),
             ByteCodeType::END(i) => write!(f, "END {}", i),
+            ByteCodeType::WRITE(i) => write!(f, "WRITE {}", i),
+            ByteCodeType::READ(i) => write!(f, "READ {}", i),
             _ => write!(f, "{:?}", self),
         }
     }
@@ -91,7 +93,7 @@ impl ByteCode {
     }
 
     pub fn execute(&mut self) {
-        for (i, bc) in self.byte_code.iter().enumerate() {
+        for (_, bc) in self.byte_code.iter().enumerate() {
             match *bc {
                 ByteCodeType::IADD(v) => {
                     if self.memory.len() <= self.index {
