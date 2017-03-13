@@ -5,7 +5,7 @@ brainfuck interpreter in rust
 
 ## Run Cli
 - `cd brain`
-- `cargo run brainfuck/hello_world.b`
+- `cargo run -- -f brainfuck/hello_world.b`
 
 ## Run Webapp
 - `cd brain/web_brain`
