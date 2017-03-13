@@ -2,5 +2,5 @@
 brainfuck interpreter in rust
 
 ## Run
-- `cd brain/web_app`
+- `cd brain/web_brain`
 - `cargo run`
