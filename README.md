@@ -1,4 +1,4 @@
-# brain
+# brain [![crates.io](https://img.shields.io/crates/v/brain-rs.svg)](https://crates.io/crates/brain-rs)
 brainfuck interpreter in rust
 
 ![alt tag](http://data.whicdn.com/images/57083921/large.jpg)
