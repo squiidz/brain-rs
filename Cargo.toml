@@ -14,3 +14,4 @@ name = "brain"
 path = "src/bin/brain.rs"
 
 [dependencies]
+clap = "*"
