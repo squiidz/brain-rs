@@ -9,4 +9,4 @@ rocket_codegen = "*"
 rocket_contrib = "*"
 serde = "*"
 serde_derive = "*"
-brain = { path = "../" }
+brain-rs = { path = "../" }

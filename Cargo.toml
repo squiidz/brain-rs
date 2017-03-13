@@ -1,7 +1,18 @@
 [package]
-name = "brain"
-version = "0.1.0"
-authors = ["jchaput <piinkyz05@gmail.com>"]
+name        = "brain-rs"
+version     = "0.1.0"
+authors     = ["jchaput <piinkyz05@gmail.com>"]
+description = "Embeddable brainfuck interpreter"
+readme      = "README.md"
+homepage    = "https://github.com/squiidz/brain"
+repository  = "https://github.com/squiidz/brain"
+license     = "MIT"
+exclude     = [
+    "ruby_brain",
+    "web_brain",
+    "brainfuck",
+    "benches",
+]
 
 [lib]
 name = "brain"
@@ -14,4 +25,4 @@ name = "brain"
 path = "src/bin/brain.rs"
 
 [dependencies]
-clap = "*"
+clap = "2.21.1"
