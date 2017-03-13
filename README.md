@@ -1,6 +1,8 @@
 # brain
 brainfuck interpreter in rust
 
+![alt tag](http://data.whicdn.com/images/57083921/large.jpg)
+
 ## Run Cli
 - `cd brain`
 - `cargo run brainfuck/hello_world.b`
