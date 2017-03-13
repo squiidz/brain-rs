@@ -1,5 +1,5 @@
 #[allow(non_camel_case_types)]
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum InstructionType {
     PLUS,
     MINUS,
@@ -47,7 +47,7 @@ impl From<char> for InstructionType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Instruction {
     pub ins_type: InstructionType,
     pub position: usize,

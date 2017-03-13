@@ -10,8 +10,8 @@ use std::fs::File;
 const ERROR: &'static str = "[Error]";
 
 fn main() {
-    let inp = io::stdin();
-    let out = io::stdout();
+    let mut inp = io::stdin();
+    let mut out = io::stdout();
 
     let matches = App::new("brain")
         .arg(Arg::with_name("file")
@@ -19,10 +19,15 @@ fn main() {
             .short("f")
             .long("file")
             .required(true)
+        ).arg(Arg::with_name("generate_bytecode")
+            .short("g")
+            .long("generate")
         ).arg(Arg::with_name("bytecode")
-            .short("b")
-            .long("bytecode")
+              .short("b")
+              .long("bytecode")
+              .conflicts_with("generate_bytecode")
         ).get_matches();
+
 
     let file_name = match matches.value_of("file") {
         Some(v) => v,
@@ -35,7 +40,7 @@ fn main() {
     let mut file = match File::open(file_name) {
         Ok(f) => f,
         Err(_) => {
-            println!("{} Source file needed.", ERROR);
+            println!("{} Source file not found.", ERROR);
             return
         },
     };
@@ -44,18 +49,24 @@ fn main() {
     match file.read_to_string(&mut code) {
         Ok(_) => { },
         Err(_) => {
-            println!("{} Source file not found.", ERROR);
+            println!("{} Source invalid.", ERROR);
             return
         },
     }
 
-    let mut cmp = Compiler::new(&code);
-    let instructions = cmp.compile();
-    if matches.is_present("bytecode") {
+    if matches.is_present("generate_bytecode") {
+        let mut cmp = Compiler::new(&code);
+        let mut instructions = cmp.compile();
+        //println!("{:?}", instructions);
         let bytecode = ByteCode::generate_bytecode(instructions);
-        println!("{}", bytecode);
+        print!("{}", bytecode);
+    } else if matches.is_present("bytecode") {
+        let mut bc_machine = ByteCode::new(&code);
+        bc_machine.execute(&mut inp, &mut out);
     } else {
-        let mut machine = Machine::new(instructions, inp, out);
+        let mut cmp = Compiler::new(&code);
+        let instructions = cmp.compile();
+        let mut machine = Machine::new(&instructions, inp, out);
         match machine.execute() {
             Ok(_) => {},
             Err(e) => {
@@ -65,3 +76,6 @@ fn main() {
         }
     }
 }
+
+
+

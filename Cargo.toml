@@ -7,6 +7,7 @@ readme      = "README.md"
 homepage    = "https://github.com/squiidz/brain"
 repository  = "https://github.com/squiidz/brain"
 license     = "MIT"
+keywords    = ["parser", "cli", "compiler", "brainfuck"]
 exclude     = [
     "ruby_brain",
     "web_brain",

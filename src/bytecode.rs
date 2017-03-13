@@ -1,3 +1,4 @@
+use std::io::{Read, Write};
 use std::fmt::{self, Display};
 use instruction::{Instruction, InstructionType};
 
@@ -13,7 +14,7 @@ pub enum ByteCodeType {
     END(usize),
     WRITE(usize),
     READ(usize),
-    INVALID, 
+    INVALID,
 }
 
 impl<'a> From<&'a Instruction> for ByteCodeType {
@@ -65,10 +66,10 @@ impl Display for ByteCodeType {
     }
 }
 
-#[derive(Debug)]
+#[allow(dead_code)]
 pub struct ByteCode {
     byte_code: Vec<ByteCodeType>,
-    memory: Vec<usize>,
+    memory: [usize; 30000],
     index: usize,
     length: usize,
 }
@@ -76,34 +77,92 @@ pub struct ByteCode {
 impl ByteCode {
     pub fn new(code: &str) -> ByteCode {
         let bcs = code.lines().map(|bc| ByteCodeType::from(bc) ).collect::<Vec<ByteCodeType>>();
+        //println!("BCS: {:?}", bcs);
         let length = bcs.len();
+        //println!("BCS LENGTH: {:?}", length);
         ByteCode {
             byte_code: bcs,
-            memory: Vec::new(),
+            memory: [0; 30000],
             index: 0,
             length: length,
         }
     }
 
-    pub fn generate_bytecode(insts: &[Instruction]) -> String {
-        insts.iter()
-        .filter(|inst| inst.ins_type != InstructionType::NEW_LINE)
-        .map(|inst| format!("{}\n", ByteCodeType::from(inst).to_string()))
-        .collect::<String>()
+    pub fn generate_bytecode(insts: Vec<Instruction>) -> String {
+        let mut byte_codes = String::new();
+        let mut loop_stack: Vec<usize> = Vec::new();
+        for (i, inst) in insts.iter().enumerate() {
+            //println!("{:?}", inst);
+            if inst.ins_type != InstructionType::NEW_LINE {
+                let ins = match inst.ins_type {
+                    InstructionType::JMP_IF_ZERO => {
+                        loop_stack.push(i);
+                        inst.clone()
+                    },
+                    InstructionType::JMP_IF_NOT_ZERO => {
+                        Instruction {
+                            ins_type: InstructionType::JMP_IF_NOT_ZERO,
+                            position: inst.position,
+                            argument: (loop_stack.pop().expect("Error generate bytecode")),
+                        }
+                    },
+                    _ => inst.clone(),
+                };
+                byte_codes.push_str(&format!("{}", ByteCodeType::from(&ins).to_string()));
+                if i < insts.len() - 1 {
+                    byte_codes.push('\n');
+                }
+            }
+        }
+        byte_codes
     }
 
-    pub fn execute(&mut self) {
-        for (_, bc) in self.byte_code.iter().enumerate() {
+    pub fn execute<R: Read, W: Write>(&mut self, r: &mut R, w: &mut W) {
+        let mut inst_point: usize = 0;
+
+        //println!("CALL EXECUTE");
+        while inst_point <= self.length - 1{
+            let bc = &self.byte_code[inst_point];
             match *bc {
                 ByteCodeType::IADD(v) => {
-                    if self.memory.len() <= self.index {
-                        self.memory.push(v);
-                        continue
-                    }
+                    //println!("CALL ADD");
                     self.memory[self.index] += v;
                 },
-                _ => return,
+                ByteCodeType::ISUB(v) => {
+                    //println!("CALL SUB");
+                    self.memory[self.index] -= v;
+                },
+                ByteCodeType::LOOP(_) => {
+                    //println!("CALL LOOP");
+                },
+                ByteCodeType::END(v) => {
+                    //println!("CALL END: {}", v);
+                    if self.memory[self.index] != 0 {
+                        inst_point = v;
+                    }
+                },
+                ByteCodeType::FOWARD(v) => {
+                    //println!("CALL FOWARD: {}", v);
+                    self.index += v;
+                },
+                ByteCodeType::BACKWARD(v) => {
+                    //println!("CALL BACKWARD: {}", v);
+                    self.index -= v;
+                },
+                ByteCodeType::WRITE(v) => {
+                    //println!("CALL WRITE");
+                    for _ in 0..v {
+                        w.write(&[self.memory[self.index] as u8]);
+                    }
+                },
+                ByteCodeType::READ(v) => {
+                    for _ in 0..v {
+                        r.read(&mut [self.memory[self.index] as u8]);
+                    }
+                },
+                _ => continue,
             }
+            inst_point += 1;
         }
     }
 }

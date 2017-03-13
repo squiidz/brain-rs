@@ -18,7 +18,7 @@ impl Compiler {
         }
     }
 
-    pub fn compile(&mut self) -> &[Instruction] {
+    pub fn compile(&mut self) -> Vec<Instruction> {
         let mut loop_stack: Vec<usize> = Vec::new();
 
         while self.position < self.code_length {
@@ -35,7 +35,7 @@ impl Compiler {
             }
             self.position += 1;
         }
-        &self.instructions
+        self.instructions.clone()
     }
 
     fn compile_foldable_instruction(&mut self, c: char, ins_type: InstructionType) {

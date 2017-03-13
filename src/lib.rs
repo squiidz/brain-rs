@@ -15,7 +15,8 @@ pub mod prelude {
 
     pub fn execute<R: Read, W: Write>(code: &str, r: R, w: W) -> Result<(), String> {
         let mut comp = Compiler::new(code);
-        let mut machine = Machine::new(comp.compile(), r, w);
+        let instruction = comp.compile();
+        let mut machine = Machine::new(&instruction, r, w);
         machine.execute()
     }
 }
