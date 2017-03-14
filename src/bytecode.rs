@@ -97,7 +97,11 @@ impl ByteCode {
                 let ins = match inst.ins_type {
                     InstructionType::JMP_IF_ZERO => {
                         loop_stack.push(i);
-                        inst.clone()
+                        Instruction {
+                            ins_type: InstructionType::JMP_IF_ZERO,
+                            position: inst.position,
+                            argument: loop_stack.len(),
+                        }
                     },
                     InstructionType::JMP_IF_NOT_ZERO => {
                         Instruction {
