@@ -16,8 +16,7 @@ fn main() {
     let matches = App::new("brain")
         .arg(Arg::with_name("file")
             .takes_value(true)
-            .short("f")
-            .long("file")
+            .index(1)
             .required(true)
         ).arg(Arg::with_name("generate_bytecode")
             .short("g")
@@ -56,7 +55,7 @@ fn main() {
 
     if matches.is_present("generate_bytecode") {
         let mut cmp = Compiler::new(&code);
-        let mut instructions = cmp.compile();
+        let instructions = cmp.compile();
         //println!("{:?}", instructions);
         let bytecode = ByteCode::generate_bytecode(instructions);
         print!("{}", bytecode);

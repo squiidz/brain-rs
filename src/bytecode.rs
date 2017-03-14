@@ -123,30 +123,28 @@ impl ByteCode {
 
     pub fn execute<R: Read, W: Write>(&mut self, r: &mut R, w: &mut W) {
         let mut inst_point: usize = 0;
-
-        //println!("CALL EXECUTE");
-        while inst_point <= self.length - 1{
+        while inst_point <= self.length - 1 {
             let bc = &self.byte_code[inst_point];
             match *bc {
                 ByteCodeType::IADD(v) => {
-                    //println!("CALL ADD");
+                    //println!("CALL ADD {}", v);
                     self.memory[self.index] += v;
                 },
                 ByteCodeType::ISUB(v) => {
-                    //println!("CALL SUB");
+                    //println!("CALL SUB {}", v);
                     self.memory[self.index] -= v;
                 },
                 ByteCodeType::LOOP(_) => {
                     //println!("CALL LOOP");
                 },
                 ByteCodeType::END(v) => {
-                    //println!("CALL END: {}", v);
+                    //println!("CALL END {}", v);
                     if self.memory[self.index] != 0 {
                         inst_point = v;
                     }
                 },
                 ByteCodeType::FOWARD(v) => {
-                    //println!("CALL FOWARD: {}", v);
+                    //println!("CALL FOWARD {}", v);
                     self.index += v;
                 },
                 ByteCodeType::BACKWARD(v) => {
@@ -156,12 +154,12 @@ impl ByteCode {
                 ByteCodeType::WRITE(v) => {
                     //println!("CALL WRITE");
                     for _ in 0..v {
-                        w.write(&[self.memory[self.index] as u8]);
+                        w.write(&[self.memory[self.index] as u8]).expect("Error on write");
                     }
                 },
                 ByteCodeType::READ(v) => {
                     for _ in 0..v {
-                        r.read(&mut [self.memory[self.index] as u8]);
+                        r.read(&mut [self.memory[self.index] as u8]).expect("Error on read");
                     }
                 },
                 _ => continue,
