@@ -1,5 +1,6 @@
 use std::io::{Read, Write};
 use std::fmt::{self, Display};
+
 use instruction::{Instruction, InstructionType};
 
 #[allow(dead_code)]
@@ -124,6 +125,7 @@ impl ByteCode {
     pub fn execute<R: Read, W: Write>(&mut self, r: &mut R, w: &mut W) {
         let mut inst_point: usize = 0;
         while inst_point <= self.length - 1 {
+            //println!("index -> {}", self.index);
             let bc = &self.byte_code[inst_point];
             match *bc {
                 ByteCodeType::IADD(v) => {
@@ -134,9 +136,7 @@ impl ByteCode {
                     //println!("CALL SUB {}", v);
                     self.memory[self.index] -= v;
                 },
-                ByteCodeType::LOOP(_) => {
-                    //println!("CALL LOOP");
-                },
+                ByteCodeType::LOOP(_) => { /* println!("CALL LOOP {}", v) */ },
                 ByteCodeType::END(v) => {
                     //println!("CALL END {}", v);
                     if self.memory[self.index] != 0 {
@@ -154,12 +154,14 @@ impl ByteCode {
                 ByteCodeType::WRITE(v) => {
                     //println!("CALL WRITE");
                     for _ in 0..v {
-                        w.write(&[self.memory[self.index] as u8]).expect("Error on write");
+                        w.write(&[self.memory[self.index] as u8])
+                            .expect("Error on write");
                     }
                 },
                 ByteCodeType::READ(v) => {
                     for _ in 0..v {
-                        r.read(&mut [self.memory[self.index] as u8]).expect("Error on read");
+                        r.read(&mut [self.memory[self.index] as u8])
+                            .expect("Error on read");
                     }
                 },
                 _ => continue,
